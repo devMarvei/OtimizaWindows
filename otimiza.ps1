@@ -1,10 +1,10 @@
-# FunÁ„o para verificar e solicitar execuÁ„o com privilÈgios elevados
+# Fun√ß√£o para verificar e solicitar execu√ß√£o com privil√©gios elevados
 function Check-Admin {
     param (
-        [string]$Message = "Este script requer privilÈgios de administrador. Por favor, execute como administrador."
+        [string]$Message = "Este script requer privil√©gios de administrador. Por favor, execute como administrador."
     )
 
-    # Verificar se o script est· sendo executado com privilÈgios de administrador
+    # Verificar se o script est√° sendo executado com privil√©gios de administrador
     if (-not [Security.Principal.WindowsPrincipal]::new([Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
         Write-Host $Message
         Start-Sleep -Seconds 3  # Pausa de 3 segundos para leitura da mensagem
@@ -12,10 +12,10 @@ function Check-Admin {
     }
 }
 
-# Verificar se o script est· sendo executado como administrador
+# Verificar se o script est√° sendo executado como administrador
 Check-Admin
 
-# FunÁ„o para solicitar entrada do usu·rio
+# Fun√ß√£o para solicitar entrada do usu√°rio
 function Prompt-User  {
     param (
         [string]$Message
@@ -24,36 +24,36 @@ function Prompt-User  {
     return $input
 }
 
-# Perguntar se deseja executar o script de otimizaÁ„o
+# Perguntar se deseja executar o script de otimiza√ß√£o
 $executeScript = Prompt-User  "DESEJA OTIMIZAR O WINDOWS? (S/N)"
 if ($executeScript -eq 'N' -or $executeScript -eq 'n') {
-    Write-Host "ExecuÁ„o do script de otimizaÁ„o foi cancelada."
+    Write-Host "Execu√ß√£o do script de otimiza√ß√£o foi cancelada."
 } else {
-    # FunÁ„o para desativar serviÁos
+    # Fun√ß√£o para desativar servi√ßos
     $services = @('DiagTrack', 'diagnosticshub.standardcollector.service', 'wisvc', 'MapsBroker', 'WbioSrvc', 'XboxGipSvc', 'XblAuthManager', 'XblGameSave', 'XboxNetApiSvc', 'WerSvc', 'WSearch', 'WMPNetworkSvc', 'W32Time', 'bthserv', 'Fax', 'seclogon')
 
-    # Desativar serviÁos para otimizaÁ„o
-    Write-Host "Desativando serviÁos desnecess·rios..."
+    # Desativar servi√ßos para otimiza√ß√£o
+    Write-Host "Desativando servi√ßos desnecess√°rios..."
     foreach ($service in $services) {
         Stop-Service -Name $service -ErrorAction SilentlyContinue
         Set-Service -Name $service -StartupType Disabled -ErrorAction SilentlyContinue
         Write-Host "$service desativado."
     }
 
-    # Desativar UAC (Controle de Conta de Usu·rio)
-    Write-Host "Desativando Controle de Conta de Usu·rio..."
+    # Desativar UAC (Controle de Conta de Usu√°rio)
+    Write-Host "Desativando Controle de Conta de Usu√°rio..."
     Set-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System" -Name "EnableLUA" -Value 0
 
-    # Desativar polÌtica de atualizaÁ„o
-    Write-Host "Desativando polÌtica de atualizaÁ„o..."
+    # Desativar pol√≠tica de atualiza√ß√£o
+    Write-Host "Desativando pol√≠tica de atualiza√ß√£o..."
     Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate" -Name "DisableWindowsUpdateAccess" -Value 1
 
     # Desativar Windows Firewall
     Write-Host "Desativando Windows Firewall..."
     Set-NetFirewallProfile -All -Enabled False
 
-    # Desativar Windows Defender e ProteÁıes Adicionais
-    Write-Host "Desativando Windows Defender e proteÁıes adicionais..."
+    # Desativar Windows Defender e Prote√ß√µes Adicionais
+    Write-Host "Desativando Windows Defender e prote√ß√µes adicionais..."
     Set-MpPreference -DisableRealtimeMonitoring $true
     Set-MpPreference -DisableBehaviorMonitoring $true
     Set-MpPreference -DisableIOAVProtection $true
@@ -85,7 +85,7 @@ Get-AppxPackage -AllUsers | Where-Object {
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSmallIcons" -Value 1
 }
 
-# FunÁ„o para perguntar ao usu·rio
+# Fun√ß√£o para perguntar ao usu√°rio
 function Prompt-User {
     param (
         [string]$message
@@ -94,7 +94,7 @@ function Prompt-User {
     return $response
 }
 
-# FunÁ„o para perguntar ao usu·rio
+# Fun√ß√£o para perguntar ao usu√°rio
 function Prompt-User {
     param (
         [string]$message
@@ -109,7 +109,7 @@ $anydeskUrl = "https://download.anydesk.com/AnyDesk.exe"
 $khelpdeskUrl = "https://khelpdesk.com.br/downloads/novo/KHelpDesk.exe?v=40.50"
 $winrarUrl = "https://www.rarlab.com/rar/winrar-x64-701br.exe"
 
-# Definir caminho da pasta onde os instaladores ser„o salvos
+# Definir caminho da pasta onde os instaladores ser√£o salvos
 $installDir = "C:\Novus Tecnologia"
 New-Item -ItemType Directory -Path $installDir -Force | Out-Null
 
@@ -119,13 +119,13 @@ if ($installNetFx3 -eq 'S' -or $installNetFx3 -eq 's') {
     Write-Host "Instalando o .NET Framework 3.5..."
     DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "A instalaÁ„o do .NET Framework 3.5 falhou. Tentando novamente online..."
+        Write-Host "A instala√ß√£o do .NET Framework 3.5 falhou. Tentando novamente online..."
         DISM /Online /Enable-Feature /FeatureName:NetFx3 /All
     } else {
-        Write-Host "InstalaÁ„o do .NET Framework 3.5 concluÌda com sucesso!"
+        Write-Host "Instala√ß√£o do .NET Framework 3.5 conclu√≠da com sucesso!"
     }
 } else {
-    Write-Host "InstalaÁ„o do .NET Framework 3.5 ignorada."
+    Write-Host "Instala√ß√£o do .NET Framework 3.5 ignorada."
 }
 
 # Perguntar se deseja instalar o Google Chrome e os outros aplicativos
@@ -135,72 +135,72 @@ if ($installChrome -eq 'S' -or $installChrome -eq 's') {
     Write-Host "Baixando e instalando o Google Chrome..."
     Invoke-WebRequest -Uri $chromeUrl -OutFile "$installDir\chrome_installer.exe"
     $chromeProcess = Start-Process -FilePath "$installDir\chrome_installer.exe" -PassThru
-    $chromeProcess.WaitForExit() # Aguarda a conclus„o do processo
+    $chromeProcess.WaitForExit() # Aguarda a conclus√£o do processo
     if ($chromeProcess.ExitCode -eq 0) {
-        Write-Host "InstalaÁ„o do Google Chrome concluÌda com sucesso!"
+        Write-Host "Instala√ß√£o do Google Chrome conclu√≠da com sucesso!"
     } else {
-        Write-Host "A instalaÁ„o do Google Chrome falhou com o cÛdigo de saÌda: $($chromeProcess.ExitCode)"
+        Write-Host "A instala√ß√£o do Google Chrome falhou com o c√≥digo de sa√≠da: $($chromeProcess.ExitCode)"
     }
 
     # Instalar o AnyDesk
     Write-Host "Baixando e instalando o AnyDesk..."
     Invoke-WebRequest -Uri $anydeskUrl -OutFile "$installDir\AnyDesk.exe"
     $anydeskProcess = Start-Process -FilePath "$installDir\AnyDesk.exe" -ArgumentList "/S" -PassThru
-    $anydeskProcess.WaitForExit() # Aguarda a conclus„o do processo
+    $anydeskProcess.WaitForExit() # Aguarda a conclus√£o do processo
     if ($anydeskProcess.ExitCode -eq 0) {
-        Write-Host "InstalaÁ„o do AnyDesk concluÌda com sucesso!"
+        Write-Host "Instala√ß√£o do AnyDesk conclu√≠da com sucesso!"
     } else {
-        Write-Host "A instalaÁ„o do AnyDesk falhou com o cÛdigo de saÌda: $($anydeskProcess.ExitCode)"
+        Write-Host "A instala√ß√£o do AnyDesk falhou com o c√≥digo de sa√≠da: $($anydeskProcess.ExitCode)"
     }
 
     # Instalar o KHelpDesk
     Write-Host "Baixando e instalando o KHelpDesk..."
     Invoke-WebRequest -Uri $khelpdeskUrl -OutFile "$installDir\KHelpDesk.exe"
     $khelpdeskProcess = Start-Process -FilePath "$installDir\KHelpDesk.exe" -ArgumentList "/S" -PassThru
-    $khelpdeskProcess.WaitForExit() # Aguarda a conclus„o do processo
+    $khelpdeskProcess.WaitForExit() # Aguarda a conclus√£o do processo
     if ($khelpdeskProcess.ExitCode -eq 0) {
-        Write-Host "InstalaÁ„o do KHelpDesk concluÌda com sucesso!"
+        Write-Host "Instala√ß√£o do KHelpDesk conclu√≠da com sucesso!"
     } else {
-        Write-Host "A instalaÁ„o do KHelpDesk falhou com o cÛdigo de saÌda: $($khelpdeskProcess.ExitCode)"
+        Write-Host "A instala√ß√£o do KHelpDesk falhou com o c√≥digo de sa√≠da: $($khelpdeskProcess.ExitCode)"
     }
 
     # Instalar o WinRAR
     Write-Host "Baixando e instalando o WinRAR..."
     Invoke-WebRequest -Uri $winrarUrl -OutFile "$installDir\WinRAR.exe"
     $winrarProcess = Start-Process -FilePath "$installDir\WinRAR.exe" -ArgumentList "/S" -PassThru
-    $winrarProcess.WaitForExit() # Aguarda a conclus„o do processo
+    $winrarProcess.WaitForExit() # Aguarda a conclus√£o do processo
     if ($winrarProcess.ExitCode -eq 0) {
-        Write-Host "InstalaÁ„o do WinRAR concluÌda com sucesso!"
+        Write-Host "Instala√ß√£o do WinRAR conclu√≠da com sucesso!"
     } else {
-        Write-Host "A instalaÁ„o do WinRAR falhou com o cÛdigo de saÌda: $($winrarProcess.ExitCode)"
+        Write-Host "A instala√ß√£o do WinRAR falhou com o c√≥digo de sa√≠da: $($winrarProcess.ExitCode)"
     }
 } else {
-    Write-Host "InstalaÁ„o do Google Chrome e outros aplicativos ignorada."
+    Write-Host "Instala√ß√£o do Google Chrome e outros aplicativos ignorada."
 }
 
-# Perguntar ao usu·rio se deseja continuar para o prÛximo script
+# Perguntar ao usu√°rio se deseja continuar para o pr√≥ximo script
 do {
-    $confirm = Read-Host "VOC  DESEJA BAIXAR OS APLICATIVOS XMENU? (S/N)"
+    $confirm = Read-Host "VOC√ä DESEJA BAIXAR OS APLICATIVOS XMENU? (S/N)"
     if ($confirm -ne 'S' -and $confirm -ne 's' -and $confirm -ne 'N' -and $confirm -ne 'n') {
-        Write-Host "Entrada inv·lida. Por favor, digite 'S' para sim ou 'N' para n„o."
+        Write-Host "Entrada inv√°lida. Por favor, digite 'S' para sim ou 'N' para n√£o."
     }
 } while ($confirm -ne 'S' -and $confirm -ne 's' -and $confirm -ne 'N' -and $confirm -ne 'n')
 
 if ($confirm -eq 'S' -or $confirm -eq 's') {
     Write-Host "Baixando e instalando os aplicativos XMENU..."
-    # Coloque aqui o cÛdigo para instalar os aplicativos XMENU
+    # Coloque aqui o c√≥digo para instalar os aplicativos XMENU
 } else {
-    Write-Host "Processo concluÌdo. Finalizando o script."
+    Write-Host "Processo conclu√≠do. Finalizando o script."
 }
 
 
 if ($confirm -eq 'N' -or $confirm -eq 'n') {
-    Write-Host "ExecuÁ„o do script continuar· sem baixar os aplicativos."
+    Write-Host "Execu√ß√£o do script continuar√° sem baixar os aplicativos."
 } else {
-    # Define o diretÛrio de destino
+    # Define o diret√≥rio de destino
     $dir = "C:\Xmenu Ferramentas"
 
-    # Cria o diretÛrio se n„o existir
+    # Cria o diret√≥rio se n√£o existir
     if (-not (Test-Path -Path $dir)) {
         New-Item -ItemType Directory -Path $dir -Force | Out-Null
     }
@@ -208,7 +208,7 @@ if ($confirm -eq 'N' -or $confirm -eq 'n') {
     # Downloads
     Write-Host "Baixando arquivos..."
 
-    # FunÁ„o para baixar arquivos
+    # Fun√ß√£o para baixar arquivos
     function Download-File {
         param (
             [string]$url,
@@ -216,9 +216,9 @@ if ($confirm -eq 'N' -or $confirm -eq 'n') {
         )
         try {
             Invoke-WebRequest -Uri $url -OutFile $filePath -ErrorAction Stop
-            Write-Host "Download concluÌdo: $filePath"
+            Write-Host "Download conclu√≠do: $filePath"
         } catch {
-            Write-Host "Erro ao baixar $filePath. Verifique a conex„o de internet e tente novamente."
+            Write-Host "Erro ao baixar $filePath. Verifique a conex√£o de internet e tente novamente."
             Write-Host "Detalhes do erro: $_"
         }
     }
@@ -250,9 +250,9 @@ if ($confirm -eq 'N' -or $confirm -eq 'n') {
 # Lista de URLs e seus nomes
 $sites = @{
     "Portal Netcontroll" = "https://portal.netcontroll.com.br/#/auth/login"
-    "TÈcnico XMenu" = "https://tecnico.xmenu.com.br/"
-    "AdministraÁ„o Netcontroll" = "https://netcontroll.com.br/adm/"
-    "Versıes XMenu" = "https://versoes.xmenu.com.br/"
+    "T√©cnico XMenu" = "https://tecnico.xmenu.com.br/"
+    "Administra√ß√£o Netcontroll" = "https://netcontroll.com.br/adm/"
+    "Vers√µes XMenu" = "https://versoes.xmenu.com.br/"
 }
 
 # Perguntar sobre cada URL
@@ -263,7 +263,7 @@ foreach ($site in $sites.GetEnumerator()) {
     do {
         $resposta = Read-Host "DESEJA ABRIR O SITE $siteNome ($siteUrl)? (S/N)"
         if ($resposta -ne 'S' -and $resposta -ne 's' -and $resposta -ne 'N' -and $resposta -ne 'n') {
-            Write-Host "Resposta inv·lida. Digite 'S' para sim ou 'N' para n„o."
+            Write-Host "Resposta inv√°lida. Digite 'S' para sim ou 'N' para n√£o."
         }
     } while ($resposta -ne 'S' -and $resposta -ne 's' -and $resposta -ne 'N' -and $resposta -ne 'n')
 
@@ -271,18 +271,18 @@ foreach ($site in $sites.GetEnumerator()) {
         Start-Process $siteUrl
         Write-Host "O site $siteNome foi aberto."
     } else {
-        Write-Host "O site $siteNome n„o ser· aberto."
+        Write-Host "O site $siteNome n√£o ser√° aberto."
     }
 }
 
-# Mensagem final apÛs processar todos os sites
+# Mensagem final ap√≥s processar todos os sites
 Write-Host "Todos os sites foram processados."
 
 # Perguntar sobre abrir o link do Saurus
 do {
     $usuarioResposta = Read-Host "Deseja abrir o link https://saurus.com.br/suporte? (s/n)"
     if ($usuarioResposta -ne 's' -and $usuarioResposta -ne 'S' -and $usuarioResposta -ne 'n' -and $usuarioResposta -ne 'N') {
-        Write-Host "Resposta inv·lida. Digite 's' para sim ou 'n' para n„o."
+        Write-Host "Resposta inv√°lida. Digite 's' para sim ou 'n' para n√£o."
     }
 } while ($usuarioResposta -ne 's' -and $usuarioResposta -ne 'S' -and $usuarioResposta -ne 'n' -and $usuarioResposta -ne 'N')
 
@@ -290,5 +290,5 @@ if ($usuarioResposta -eq 's' -or $usuarioResposta -eq 'S') {
     Start-Process "https://saurus.com.br/suporte"
     Write-Host "O link foi aberto."
 } elseif ($usuarioResposta -eq 'n' -or $usuarioResposta -eq 'N') {
-    Write-Host "O link n„o ser· aberto."
+    Write-Host "O link n√£o ser√° aberto."
 }
