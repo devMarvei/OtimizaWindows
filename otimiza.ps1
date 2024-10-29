@@ -66,24 +66,41 @@ if ($executeScript -eq 'N' -or $executeScript -eq 'n') {
     Write-Host "Desativando Cortana..."
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search" -Name "CortanaEnabled" -Value 0
 
-    # Desativar Windows Store
-Write-Host "Desativando Windows Store..."
-Get-AppxPackage -AllUsers | Where-Object { 
-    $_.InstallLocation -like '*WindowsApps*' -and 
-    $_.Name -notlike '*Microsoft.WindowsCalculator*' -and 
-    $_.Name -notlike '*Microsoft.Windows.Photos*' 
-} | ForEach-Object { 
-    Remove-AppxPackage -Package $_.PackageFullName 
-}
+    # Desativar Windows Store, exceto a Calculadora e Fotos
+    Write-Host "Desativando Windows Store, exceto a Calculadora e Fotos..."
+    Get-AppxPackage -AllUsers | Where-Object { 
+        $_.InstallLocation -like '*WindowsApps*' -and 
+        $_.Name -notlike '*Microsoft.WindowsCalculator*' -and 
+        $_.Name -notlike '*Microsoft.Windows.Photos*' 
+    } | ForEach-Object { 
+        Remove-AppxPackage -Package $_.PackageFullName 
+    }
+
+    # Instalar a Calculadora e o aplicativo Fotos do Windows
+    Write-Host "Instalando a Calculadora e o aplicativo Fotos do Windows..."
+    Get-AppxPackage -AllUsers Microsoft.WindowsCalculator -ErrorAction SilentlyContinue | ForEach-Object {
+        if (-not $_) {
+            Write-Host "Instalando a Calculadora..."
+            Add-AppxPackage -Path "$($_.InstallLocation)\Microsoft.WindowsCalculator.appx"
+        }
+    }
+
+    Get-AppxPackage -AllUsers Microsoft.Windows.Photos -ErrorAction SilentlyContinue | ForEach-Object {
+        if (-not $_) {
+            Write-Host "Instalando o aplicativo Fotos..."
+            Add-AppxPackage -Path "$($_.InstallLocation)\Microsoft.Windows.Photos.appx"
+        }
+    }
 
     # Desativar efeitos visuais para melhorar desempenho
     Write-Host "Desativando efeitos visuais para melhorar desempenho..."
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewAlphaSelect" -Value 0
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "ListviewShadow" -Value 0
- Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAnimations" -Value 0
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAnimations" -Value 0
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarNoThumbnail" -Value 1
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSmallIcons" -Value 1
 }
+
 
 # Função para perguntar ao usuário
 function Prompt-User {
