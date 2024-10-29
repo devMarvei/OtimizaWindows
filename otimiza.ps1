@@ -76,20 +76,20 @@ if ($executeScript -eq 'N' -or $executeScript -eq 'n') {
         Remove-AppxPackage -Package $_.PackageFullName 
     }
 
-    # Instalar a Calculadora e o aplicativo Fotos do Windows
-    Write-Host "Instalando a Calculadora e o aplicativo Fotos do Windows..."
-    Get-AppxPackage -AllUsers Microsoft.WindowsCalculator -ErrorAction SilentlyContinue | ForEach-Object {
-        if (-not $_) {
-            Write-Host "Instalando a Calculadora..."
-            Add-AppxPackage -Path "$($_.InstallLocation)\Microsoft.WindowsCalculator.appx"
-        }
+    # Instalar a Calculadora do Windows se não estiver instalada
+    if (-not (Get-AppxPackage -Name Microsoft.WindowsCalculator -ErrorAction SilentlyContinue)) {
+        Write-Host "Instalando a Calculadora do Windows..."
+        Add-AppxPackage -Path "$env:SystemRoot\SystemApps\Microsoft.WindowsCalculator_*\Microsoft.WindowsCalculator.appx"
+    } else {
+        Write-Host "A Calculadora do Windows já está instalada."
     }
 
-    Get-AppxPackage -AllUsers Microsoft.Windows.Photos -ErrorAction SilentlyContinue | ForEach-Object {
-        if (-not $_) {
-            Write-Host "Instalando o aplicativo Fotos..."
-            Add-AppxPackage -Path "$($_.InstallLocation)\Microsoft.Windows.Photos.appx"
-        }
+    # Instalar o Visualizador de Fotos se não estiver instalado
+    if (-not (Get-AppxPackage -Name Microsoft.Windows.Photos -ErrorAction SilentlyContinue)) {
+        Write-Host "Instalando o Visualizador de Fotos do Windows..."
+        Add-AppxPackage -Path "$env:SystemRoot\SystemApps\Microsoft.Windows.Photos_*\Microsoft.Windows.Photos.appx"
+    } else {
+        Write-Host "O Visualizador de Fotos do Windows já está instalado."
     }
 
     # Desativar efeitos visuais para melhorar desempenho
@@ -100,7 +100,6 @@ if ($executeScript -eq 'N' -or $executeScript -eq 'n') {
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarNoThumbnail" -Value 1
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarSmallIcons" -Value 1
 }
-
 
 # Função para perguntar ao usuário
 function Prompt-User {
